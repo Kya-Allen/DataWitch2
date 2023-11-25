@@ -3,7 +3,7 @@ A Computational Statistics/Machine Learning Library with an emphasis on lesser k
 
 ## highlights
   - Clustering
-    - Convex Clustering (first ever rust/python implementation)
+    - Convex Clustering (L1 & L2 penalties)
   - Taxometrics (Taxometric Analysis)
     - Maximum Eigenvalue (MaxEig)
     - Mean Above Minus Below a Cut (MAMBAC)
