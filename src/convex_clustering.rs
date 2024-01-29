@@ -5,15 +5,17 @@ use crate::estimators;
 use std::vec::Vec;
 use linear::Matrix;
 
-/// Dynamic Programming solution to the L1 Convex Clustering problem. Computes a full clusterpath, each cluster solution corresponding to one of the penalty parameters input as an argument to the function. 
-///Based on the conference paper "Dynamic Visualization for L1 Fusion Convex Clustering in Near-Linear Time"
-/// assume matrix columns are observations. 
+// Dynamic Programming solution to the L1 Convex Clustering problem. Computes a full clusterpath, each cluster solution corresponding to one of the penalty parameters input as an argument to the function. 
+// Based on the conference paper "Dynamic Visualization for L1 Fusion Convex Clustering in Near-Linear Time" by Binguan Zhang, Jie Chen, and Yoshikazu Terada
+// published in Proceedings of the Thirty-Seventh Conference on Uncertainty in Artificial Intelligence (UAI 2021), PMLR 161:515–524
+// 
+// assume matrix columns are observations. 
 
 pub fn c_paint(design_matrix: Matrix, path_length: usize) -> Vec<Matrix> {
     let n: usize = design_matrix.num_columns;
     let p: usize = design_matrix.num_rows;
     let design_transpose: Matrix = linear::get_transpose(&design_matrix); 
-    let penalty_max: f64 =  1.0; //max_penalty(&design_transpose);
+    let penalty_max: f64 =  1.0; // max_penalty(&design_transpose);
     let mut penalty_path: Vec<f64> = vec![0.0; path_length];
     penalty_path = penalty_path.iter().enumerate().map(|(i, x)| return (penalty_max * ((i+1) as f64 /path_length as f64))).collect();
     println!("penalty path: {:?}", penalty_path);
@@ -27,26 +29,26 @@ pub fn c_paint(design_matrix: Matrix, path_length: usize) -> Vec<Matrix> {
         (sorted_dimension, ordering) = zipsort::vecsort(&sorted_dimension, &ordering);
 
 
-        //iterate over each penalty in the path
+        // iterate over each penalty in the path
         // for each penalty, we recieve a vector of partial centroids
         let mut dimension_path: Vec<Vec<f64>> = Vec::with_capacity(path_length);
         for penalty in penalty_path.iter() {
             // use the dynamic programming solver
             // recieve a vector of partial centroids
-            //let boop: f64 = 0.05;
+            // let boop: f64 = 0.05;
             let partial_centroids: Vec<f64> = partial_clusterpath(&sorted_dimension, penalty, &n);
             println!("{:?}", partial_centroids);
             dimension_path.push(partial_centroids); 
         }
         // dimension_path: Vec<Vec<partial_centroids>>
-        for dim_index in 0..dimension_path.len() {
+        for path_step in 0..dimension_path.len() {
             // for each 'partial_centroids' in dimension path
             let temp_order: Vec<f64>;
-            (dimension_path[dim_index], temp_order) = zipsort::vecsort(&ordering, &dimension_path[dim_index]);
+            (dimension_path[path_step], temp_order) = zipsort::vecsort(&ordering, &dimension_path[path_step]);
         }
         for i in 0..cluster_solutions.len() {
             // start constructing cluster solution matrices where each column is a dimension of the data. Will need to be transposed
-            //dimension_path[i].clone().into_iter().enumerate().map(|(i, x)| {cluster_solutions[i].data[i] = x; 0});
+            // dimension_path[i].clone().into_iter().enumerate().map(|(i, x)| {cluster_solutions[i].data[i] = x; 0});
             cluster_solutions[i].data.append(&mut dimension_path[i])
         }
 
@@ -89,8 +91,6 @@ pub fn partial_clusterpath(sorted_dimension: &[f64], penalty: &f64, n: &usize) -
     let adjusted_penalties: Vec<f64> = (0..n-1).enumerate().map(|(i, _)| penalty_adjustment(i, penalty, n)).collect();
     //println!("adjusted penalties: {:?}", adjusted_penalties);
 
-
-    
     potential_pc_list = optimize_potential_pc(sorted_dimension, &adjusted_penalties, potential_pc_list);
     // solve a_n such that h_n(a_n) = 0
     let mut partial_centroids: Vec<f64> = vec![0.0; sorted_dimension.len()];

@@ -5,7 +5,7 @@ use crate::estimators;
 use std::vec::Vec;
 use linear::Matrix;
 
-// treat columns of design_matrix as observations. Each column consists of every dimension for a single observation
+/// treat columns of design_matrix as observations. Each column consists of every dimension for a single observation
 pub fn clusterpath_l2(design_matrix: Matrix, weight: f64, mut penalty: f64) -> (Vec<Matrix>, Vec<f64>) {
     let mut centroids: Matrix = design_matrix.clone();
     let n: usize = centroids.num_columns;

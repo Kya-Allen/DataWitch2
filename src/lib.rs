@@ -6,6 +6,7 @@ mod L2_clusterpath;
 mod zipsort;
 mod estimators;
 mod convex_clustering;
+mod approximate_nearest_neighbors;
 use std::vec;
 
 fn main() {
@@ -49,7 +50,7 @@ fn main() {
     let en: usize = 6;
     let more_results = convex_clustering::partial_clusterpath(&sorted_dim, &new_pen, &en);
     println!("partial test {:?}", more_results);
-    let fun_data: linear::Matrix = linear::Matrix::new(vec![5.0, 3.0, 0.0, -2.0, -3.0], 5);
+    let fun_data: linear::Matrix = linear::Matrix::new(vec![5.0, 3.0, -2.0, -3.0], 4);
     let even_more = convex_clustering::c_paint(fun_data, 6);
     
 }

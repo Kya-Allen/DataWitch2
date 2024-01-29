@@ -93,6 +93,8 @@ pub fn matrix_vector_product(matrix_1: &Matrix, vector_2: &[f64]) -> Vec<f64> {
     return result_flat_mat
 }
 
+
+/// 1 = l1 norm; 2 = l2 norm; -1 = l-inf norm
 pub fn vector_norm(vector_1: &[f64], order: isize) -> f64 {
     match order {
         1 => return l1_norm(vector_1),
@@ -165,6 +167,7 @@ pub fn rayleigh_quotient(matrix: &Matrix, eigenvector: &[f64]) -> f64 {
     return top_dot / bottom_dot; 
 }
 
+/// euclidean distance
 pub fn euclidean_distance(vector_1: &[f64], vector_2: &[f64]) -> f64 {
     let difference_vector: Vec<f64> = vector_subtract(vector_1, vector_2);
     return l2_norm(&difference_vector[..]);  

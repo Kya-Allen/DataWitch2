@@ -23,9 +23,8 @@ pub struct Mambac {
 }
 
 impl Mambac {
+    /// defined for two variables at a time, where the number of partitions is the number of divisions, not the number of groups
     fn fit(&mut self, partition_variable: Vec<f64>, comparison_variable: Vec<f64>, num_partitions: usize) -> Vec<f64> {
-        // defined for two variables at a time
-        // where the number of partitions is the number of divisions, not the number of groups
         let partition_space: f64 = linear::vector_norm(&partition_variable, -1) - linear::minimum(&partition_variable);
         let (sorted_partition, sorted_comparison): (Vec<f64>, Vec<f64>) = zipsort::vecsort(&partition_variable[..], &comparison_variable[..]);
         let partition_interval: f64 = partition_space / (num_partitions + 1) as f64;
